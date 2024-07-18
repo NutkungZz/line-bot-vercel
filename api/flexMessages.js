@@ -13,13 +13,13 @@ const createQuickReplyMenu = () => ({
           weight: 'bold',
           size: 'xl',
           align: 'center',
-          color: '#FF6B6B' // Pantone Living Coral
+          color: '#FFFFFF'
         },
         {
           type: 'text',
           text: 'เลือกบริการที่ต้องการ',
           size: 'md',
-          color: '#4ECDC4', // Pantone Lucite Green
+          color: '#E0E0E0',
           align: 'center',
           margin: 'md'
         },
@@ -32,7 +32,7 @@ const createQuickReplyMenu = () => ({
             {
               type: 'button',
               style: 'primary',
-              color: '#45B7D1', // Pantone Scuba Blue
+              color: '#9C7CF4',
               action: {
                 type: 'message',
                 label: 'ตรวจสอบสถานะ MRM',
@@ -43,7 +43,7 @@ const createQuickReplyMenu = () => ({
             {
               type: 'button',
               style: 'primary',
-              color: '#98B4D4', // Pantone Serenity
+              color: '#B19EF0',
               action: {
                 type: 'message',
                 label: 'รายงานปัญหา',
@@ -54,7 +54,7 @@ const createQuickReplyMenu = () => ({
             {
               type: 'button',
               style: 'primary',
-              color: '#F7CAC9', // Pantone Rose Quartz
+              color: '#C6BDED',
               action: {
                 type: 'message',
                 label: 'ข้อมูล MRM',
@@ -65,7 +65,7 @@ const createQuickReplyMenu = () => ({
           ]
         }
       ],
-      backgroundColor: '#2A363B' // Dark background
+      backgroundColor: '#6247AA'
     },
     footer: {
       type: 'box',
@@ -80,17 +80,17 @@ const createQuickReplyMenu = () => ({
             label: 'เยี่ยมชมเว็บไซต์ MRM',
             uri: 'https://mrm.pea.co.th'
           },
-          color: '#FF6B6B' // Pantone Living Coral
+          color: '#FFFFFF'
         }
       ],
-      backgroundColor: '#2A363B' // Dark background
+      backgroundColor: '#6247AA'
     }
   },
   quickReply: {
     items: [
       {
         type: 'action',
-        imageUrl: 'https://img.icons8.com/fluency/48/000000/check-document.png',
+        imageUrl: 'https://img.icons8.com/pastel-glyph/64/000000/server--v1.png',
         action: {
           type: 'message',
           label: 'ตรวจสอบสถานะ MRM',
@@ -99,7 +99,7 @@ const createQuickReplyMenu = () => ({
       },
       {
         type: 'action',
-        imageUrl: 'https://img.icons8.com/fluency/48/000000/error.png',
+        imageUrl: 'https://img.icons8.com/pastel-glyph/64/000000/error--v2.png',
         action: {
           type: 'message',
           label: 'รายงานปัญหา',
@@ -108,7 +108,7 @@ const createQuickReplyMenu = () => ({
       },
       {
         type: 'action',
-        imageUrl: 'https://img.icons8.com/fluency/48/000000/information.png',
+        imageUrl: 'https://img.icons8.com/pastel-glyph/64/000000/info--v2.png',
         action: {
           type: 'message',
           label: 'ข้อมูล MRM',
