@@ -1,6 +1,7 @@
 const line = require('@line/bot-sdk');
 const express = require('express');
 const fetch = require('node-fetch');
+const { createQuickReplyMenu } = require('./flexMessages');
 
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -30,67 +31,6 @@ async function checkMRMStatus() {
   }
 }
 
-function createQuickReplyMenu() {
-  return {
-    type: 'flex',
-    altText: 'MRM Monitor Menu',
-    contents: {
-      type: 'bubble',
-      body: {
-        type: 'box',
-        layout: 'vertical',
-        contents: [
-          {
-            type: 'text',
-            text: 'MRM Monitor',
-            weight: 'bold',
-            size: 'xl',
-            align: 'center',
-            color: '#FFD700'
-          },
-          {
-            type: 'text',
-            text: 'เลือกบริการที่ต้องการ',
-            size: 'md',
-            color: '#FFFFFF',
-            align: 'center',
-            margin: 'md'
-          }
-        ],
-        backgroundColor: '#1E1E1E'
-      }
-    },
-    quickReply: {
-      items: [
-        {
-          type: 'action',
-          action: {
-            type: 'message',
-            label: 'ตรวจสอบสถานะ MRM',
-            text: 'สถานะ MRM'
-          }
-        },
-        {
-          type: 'action',
-          action: {
-            type: 'message',
-            label: 'รายงานปัญหา',
-            text: 'รายงานปัญหา'
-          }
-        },
-        {
-          type: 'action',
-          action: {
-            type: 'message',
-            label: 'ข้อมูล MRM',
-            text: 'ข้อมูล MRM'
-          }
-        }
-      ]
-    }
-  };
-}
-
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
@@ -100,16 +40,14 @@ async function handleEvent(event) {
   const isGroupChat = event.source.type === 'group' || event.source.type === 'room';
   let command = event.message.text;
 
-  // ตรวจสอบและจัดการคำสั่งสำหรับ group chat
   if (isGroupChat) {
     const botKeyword = 'บอท';
     if (!command.toLowerCase().startsWith(botKeyword.toLowerCase())) {
-      return Promise.resolve(null);  // ไม่ตอบถ้าไม่ได้เรียกบอท
+      return Promise.resolve(null);
     }
     command = command.slice(botKeyword.length).trim();
   }
 
-  // จัดการคำสั่งที่มาจากการคลิกปุ่มใน Quick Reply Menu
   switch (command.toLowerCase()) {
     case "เมนู":
       reply = createQuickReplyMenu();
@@ -129,7 +67,6 @@ async function handleEvent(event) {
         console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
         reply = { type: 'text', text: "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด" };
       } else {
-        // ถ้าไม่ตรงกับคำสั่งใดๆ ให้แสดงเมนู
         reply = createQuickReplyMenu();
       }
   }
