@@ -30,12 +30,70 @@ async function checkMRMStatus() {
   }
 }
 
+function createButtonMenu() {
+  return {
+    type: 'flex',
+    altText: 'เมนูการใช้งาน',
+    contents: {
+      type: 'bubble',
+      body: {
+        type: 'box',
+        layout: 'vertical',
+        contents: [
+          {
+            type: 'text',
+            text: 'เมนูการใช้งาน',
+            weight: 'bold',
+            size: 'xl',
+            align: 'center'
+          },
+          {
+            type: 'box',
+            layout: 'vertical',
+            margin: 'lg',
+            spacing: 'sm',
+            contents: [
+              {
+                type: 'button',
+                style: 'primary',
+                action: {
+                  type: 'message',
+                  label: 'สถานะ MRM',
+                  text: 'สถานะ MRM'
+                }
+              },
+              {
+                type: 'button',
+                style: 'primary',
+                action: {
+                  type: 'message',
+                  label: 'รายงานปัญหา',
+                  text: 'รายงานปัญหา'
+                }
+              },
+              {
+                type: 'button',
+                style: 'primary',
+                action: {
+                  type: 'message',
+                  label: 'ข้อมูล MRM',
+                  text: 'ข้อมูล MRM'
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  };
+}
+
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
 
-  let reply_text = "ขอโทษค่ะ ฉันไม่เข้าใจคำสั่งนี้";
+  let reply = { type: 'text', text: "ขอโทษค่ะ ฉันไม่เข้าใจคำสั่งนี้" };
   const isGroupChat = event.source.type === 'group';
 
   // ถ้าเป็นแชทกลุ่ม ให้ตรวจสอบว่ามีการเรียกบอทหรือไม่
@@ -47,24 +105,28 @@ async function handleEvent(event) {
     command = command.slice(3).trim();  // ตัดคำว่า "บอท" ออก
   }
 
-  if (command === "สถานะ server") {
-    reply_text = "Server MRM กำลังทำงานปกติ";
-  } else if (command === "สถานะ MRM") {
-    reply_text = await checkMRMStatus();
-  } else if (command === "รายงานปัญหา") {
-    reply_text = "กรุณาแจ้งรายละเอียดปัญหาที่พบ";
-  } else if (command.startsWith("ปัญหา:")) {
-    console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
-    reply_text = "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด";
-  } else if (command === "ข้อมูล MRM") {
-    const completeness = 100; // ตัวอย่างค่า
-    reply_text = `ความครบถ้วนของข้อมูล: ${completeness}%`;
+  switch (command) {
+    case "เมนู":
+      reply = createButtonMenu();
+      break;
+    case "สถานะ MRM":
+      reply.text = await checkMRMStatus();
+      break;
+    case "รายงานปัญหา":
+      reply.text = "กรุณาแจ้งรายละเอียดปัญหาที่พบ โดยพิมพ์: ปัญหา: [รายละเอียด]";
+      break;
+    case "ข้อมูล MRM":
+      const completeness = 100; // ตัวอย่างค่า
+      reply.text = `ความครบถ้วนของข้อมูล: ${completeness}%`;
+      break;
+    default:
+      if (command.startsWith("ปัญหา:")) {
+        console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
+        reply.text = "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด";
+      }
   }
 
-  return client.replyMessage(event.replyToken, {
-    type: 'text',
-    text: reply_text
-  });
+  return client.replyMessage(event.replyToken, reply);
 }
 
 module.exports = app;
