@@ -85,37 +85,6 @@ const createQuickReplyMenu = () => ({
       ],
       backgroundColor: '#6247AA'
     }
-  },
-  quickReply: {
-    items: [
-      {
-        type: 'action',
-        imageUrl: 'https://img.icons8.com/pastel-glyph/64/000000/server--v1.png',
-        action: {
-          type: 'message',
-          label: 'ตรวจสอบสถานะ MRM',
-          text: 'สถานะ MRM'
-        }
-      },
-      {
-        type: 'action',
-        imageUrl: 'https://img.icons8.com/pastel-glyph/64/000000/error--v2.png',
-        action: {
-          type: 'message',
-          label: 'รายงานปัญหา',
-          text: 'รายงานปัญหา'
-        }
-      },
-      {
-        type: 'action',
-        imageUrl: 'https://img.icons8.com/pastel-glyph/64/000000/info--v2.png',
-        action: {
-          type: 'message',
-          label: 'ข้อมูล MRM',
-          text: 'ข้อมูล MRM'
-        }
-      }
-    ]
   }
 });
 
