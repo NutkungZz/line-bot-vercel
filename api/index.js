@@ -40,12 +40,18 @@ async function handleEvent(event) {
   const isGroupChat = event.source.type === 'group' || event.source.type === 'room';
   let command = event.message.text;
 
+  // ตรวจสอบและจัดการคำสั่งสำหรับ group chat
   if (isGroupChat) {
     const botKeyword = 'บอท';
     if (!command.toLowerCase().startsWith(botKeyword.toLowerCase())) {
-      return Promise.resolve(null);
+      // ตรวจสอบว่าเป็นคำสั่งจากเมนูหรือไม่
+      const menuCommands = ['สถานะ mrm', 'รายงานปัญหา', 'ข้อมูล mrm'];
+      if (!menuCommands.includes(command.toLowerCase())) {
+        return Promise.resolve(null);  // ไม่ตอบถ้าไม่ใช่คำสั่งจากเมนูและไม่ได้เรียกบอท
+      }
+    } else {
+      command = command.slice(botKeyword.length).trim();  // ตัดคำว่า "บอท" ออก
     }
-    command = command.slice(botKeyword.length).trim();
   }
 
   switch (command.toLowerCase()) {
