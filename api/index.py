@@ -9,7 +9,7 @@ CHANNEL_ACCESS_TOKEN = os.environ.get('CHANNEL_ACCESS_TOKEN')
 CHANNEL_SECRET = os.environ.get('CHANNEL_SECRET')
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(CHANNEL_SECRET)
+webhook_handler = WebhookHandler(CHANNEL_SECRET)
 
 def handle_message(event):
     text = event.message.text
@@ -30,30 +30,29 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=reply_text))
 
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/plain')
-        self.end_headers()
-        self.wfile.write('Hello, World!'.encode())
-        return
-
-    def do_POST(self):
-        content_length = int(self.headers['Content-Length'])
-        body = self.rfile.read(content_length)
-        signature = self.headers.get('X-Line-Signature', '')
-
-        try:
-            handler.handle(body.decode(), signature)
-        except InvalidSignatureError:
-            self.send_response(400)
-            self.end_headers()
-            return
-
-        self.send_response(200)
-        self.end_headers()
-        return
-
-@handler.add(MessageEvent, message=TextMessage)
+@webhook_handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     handle_message(event)
+
+def handler(event, context):
+    if event['httpMethod'] == 'POST':
+        signature = event['headers'].get('x-line-signature', '')
+        body = event['body']
+
+        try:
+            webhook_handler.handle(body, signature)
+        except InvalidSignatureError:
+            return {
+                'statusCode': 400,
+                'body': json.dumps('Invalid signature')
+            }
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps('OK')
+        }
+    elif event['httpMethod'] == 'GET':
+        return {
+            'statusCode': 200,
+            'body': json.dumps('Hello, World!')
+        }
