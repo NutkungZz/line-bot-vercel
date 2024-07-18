@@ -46,13 +46,13 @@ function createButtonMenu() {
             weight: 'bold',
             size: 'xl',
             align: 'center',
-            color: '#1a237e'
+            color: '#FFD700'
           },
           {
             type: 'text',
             text: 'เลือกบริการที่ต้องการ',
             size: 'sm',
-            color: '#546e7a',
+            color: '#A9A9A9',
             align: 'center',
             margin: 'md'
           },
@@ -64,41 +64,43 @@ function createButtonMenu() {
             contents: [
               {
                 type: 'button',
-                style: 'link',
-                height: 'sm',
                 action: {
                   type: 'message',
                   label: 'ตรวจสอบสถานะ MRM',
                   text: 'สถานะ MRM'
                 },
-                color: '#4fc3f7'
+                color: '#FFFFFF',
+                style: 'secondary',
+                adjustMode: 'shrink-to-fit'
               },
               {
                 type: 'button',
-                style: 'link',
-                height: 'sm',
                 action: {
                   type: 'message',
                   label: 'รายงานปัญหา',
                   text: 'รายงานปัญหา'
                 },
-                color: '#4fc3f7'
+                color: '#FFFFFF',
+                style: 'secondary',
+                adjustMode: 'shrink-to-fit'
               },
               {
                 type: 'button',
-                style: 'link',
-                height: 'sm',
                 action: {
                   type: 'message',
                   label: 'ข้อมูล MRM',
                   text: 'ข้อมูล MRM'
                 },
-                color: '#4fc3f7'
+                color: '#FFFFFF',
+                style: 'secondary',
+                adjustMode: 'shrink-to-fit'
               }
             ]
           }
         ],
-        backgroundColor: '#e3f2fd'
+        backgroundColor: '#1E1E1E',
+        borderColor: '#FFD700',
+        borderWidth: 'light'
       },
       footer: {
         type: 'box',
@@ -107,22 +109,60 @@ function createButtonMenu() {
         contents: [
           {
             type: 'button',
-            style: 'link',
-            height: 'sm',
             action: {
               type: 'uri',
               label: 'เยี่ยมชมเว็บไซต์',
               uri: 'https://mrm.pea.co.th'
             },
-            color: '#1976d2'
-          },
-          {
-            type: 'spacer',
-            size: 'sm'
+            color: '#FFD700',
+            style: 'link'
           }
         ],
-        flex: 0
+        backgroundColor: '#1E1E1E'
+      },
+      styles: {
+        body: {
+          backgroundColor: '#1E1E1E'
+        },
+        footer: {
+          backgroundColor: '#1E1E1E'
+        }
       }
+    }
+  };
+}
+
+function createQuickReplyMenu() {
+  return {
+    type: 'text',
+    text: 'เลือกบริการที่ต้องการ',
+    quickReply: {
+      items: [
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: 'ตรวจสอบสถานะ MRM',
+            text: 'สถานะ MRM'
+          }
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: 'รายงานปัญหา',
+            text: 'รายงานปัญหา'
+          }
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: 'ข้อมูล MRM',
+            text: 'ข้อมูล MRM'
+          }
+        }
+      ]
     }
   };
 }
@@ -132,36 +172,37 @@ async function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-  let reply = { type: 'text', text: "ขอโทษค่ะ ฉันไม่เข้าใจคำสั่งนี้" };
+  let reply;
   const isGroupChat = event.source.type === 'group';
-
-  // ถ้าเป็นแชทกลุ่ม ให้ตรวจสอบว่ามีการเรียกบอทหรือไม่
   let command = event.message.text;
+
   if (isGroupChat) {
     if (!command.toLowerCase().startsWith('บอท')) {
-      return Promise.resolve(null);  // ไม่ตอบถ้าไม่ได้เรียกบอท
+      return Promise.resolve(null);
     }
-    command = command.slice(3).trim();  // ตัดคำว่า "บอท" ออก
+    command = command.slice(3).trim();
   }
 
   switch (command) {
     case "เมนู":
-      reply = createButtonMenu();
+      reply = [createButtonMenu(), createQuickReplyMenu()];
       break;
     case "สถานะ MRM":
-      reply.text = await checkMRMStatus();
+      reply = { type: 'text', text: await checkMRMStatus() };
       break;
     case "รายงานปัญหา":
-      reply.text = "กรุณาแจ้งรายละเอียดปัญหาที่พบ โดยพิมพ์: ปัญหา: [รายละเอียด]";
+      reply = { type: 'text', text: "กรุณาแจ้งรายละเอียดปัญหาที่พบ โดยพิมพ์: ปัญหา: [รายละเอียด]" };
       break;
     case "ข้อมูล MRM":
       const completeness = 100; // ตัวอย่างค่า
-      reply.text = `ความครบถ้วนของข้อมูล: ${completeness}%`;
+      reply = { type: 'text', text: `ความครบถ้วนของข้อมูล: ${completeness}%` };
       break;
     default:
       if (command.startsWith("ปัญหา:")) {
         console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
-        reply.text = "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด";
+        reply = { type: 'text', text: "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด" };
+      } else {
+        reply = { type: 'text', text: "ขอโทษค่ะ ฉันไม่เข้าใจคำสั่งนี้ กรุณาพิมพ์ 'เมนู' เพื่อดูตัวเลือกที่มีค่ะ" };
       }
   }
 
