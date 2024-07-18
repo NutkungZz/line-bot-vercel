@@ -31,33 +31,33 @@ const createQuickReplyMenu = () => ({
           contents: [
             {
               type: 'button',
-              style: 'primary',
-              color: '#9C7CF4',
+              style: 'secondary',
+              color: '#FFFFFF',
               action: {
                 type: 'message',
-                label: 'ตรวจสอบสถานะ MRM',
+                label: '🔍 ตรวจสอบสถานะ MRM',
                 text: 'สถานะ MRM'
               },
               height: 'sm'
             },
             {
               type: 'button',
-              style: 'primary',
-              color: '#B19EF0',
+              style: 'secondary',
+              color: '#FFFFFF',
               action: {
                 type: 'message',
-                label: 'รายงานปัญหา',
+                label: '🚨 รายงานปัญหา',
                 text: 'รายงานปัญหา'
               },
               height: 'sm'
             },
             {
               type: 'button',
-              style: 'primary',
-              color: '#C6BDED',
+              style: 'secondary',
+              color: '#FFFFFF',
               action: {
                 type: 'message',
-                label: 'ข้อมูล MRM',
+                label: 'ℹ️ ข้อมูล MRM',
                 text: 'ข้อมูล MRM'
               },
               height: 'sm'
@@ -77,7 +77,7 @@ const createQuickReplyMenu = () => ({
           height: 'sm',
           action: {
             type: 'uri',
-            label: 'เยี่ยมชมเว็บไซต์ MRM',
+            label: '🌐 เยี่ยมชมเว็บไซต์ MRM',
             uri: 'https://mrm.pea.co.th'
           },
           color: '#FFFFFF'
