@@ -97,32 +97,34 @@ async function handleEvent(event) {
   }
 
   let reply;
-  const isGroupChat = event.source.type === 'group';
+  const isGroupChat = event.source.type === 'group' || event.source.type === 'room';
   let command = event.message.text;
 
+  // ตรวจสอบและจัดการคำสั่งสำหรับ group chat
   if (isGroupChat) {
-    if (!command.toLowerCase().startsWith('บอท')) {
-      return Promise.resolve(null);
+    const botKeyword = 'บอท';
+    if (!command.toLowerCase().startsWith(botKeyword.toLowerCase())) {
+      return Promise.resolve(null);  // ไม่ตอบถ้าไม่ได้เรียกบอท
     }
-    command = command.slice(3).trim();
+    command = command.slice(botKeyword.length).trim();
   }
 
-  switch (command) {
+  switch (command.toLowerCase()) {
     case "เมนู":
       reply = createQuickReplyMenu();
       break;
-    case "สถานะ MRM":
+    case "สถานะ mrm":
       reply = { type: 'text', text: await checkMRMStatus() };
       break;
     case "รายงานปัญหา":
       reply = { type: 'text', text: "กรุณาแจ้งรายละเอียดปัญหาที่พบ โดยพิมพ์: ปัญหา: [รายละเอียด]" };
       break;
-    case "ข้อมูล MRM":
+    case "ข้อมูล mrm":
       const completeness = 100; // ตัวอย่างค่า
       reply = { type: 'text', text: `ความครบถ้วนของข้อมูล: ${completeness}%` };
       break;
     default:
-      if (command.startsWith("ปัญหา:")) {
+      if (command.toLowerCase().startsWith("ปัญหา:")) {
         console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
         reply = { type: 'text', text: "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด" };
       } else {
