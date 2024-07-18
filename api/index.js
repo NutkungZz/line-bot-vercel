@@ -36,17 +36,27 @@ async function handleEvent(event) {
   }
 
   let reply_text = "ขอโทษค่ะ ฉันไม่เข้าใจคำสั่งนี้";
+  const isGroupChat = event.source.type === 'group';
 
-  if (event.message.text === "สถานะ server") {
+  // ถ้าเป็นแชทกลุ่ม ให้ตรวจสอบว่ามีการเรียกบอทหรือไม่
+  let command = event.message.text;
+  if (isGroupChat) {
+    if (!command.toLowerCase().startsWith('บอท')) {
+      return Promise.resolve(null);  // ไม่ตอบถ้าไม่ได้เรียกบอท
+    }
+    command = command.slice(3).trim();  // ตัดคำว่า "บอท" ออก
+  }
+
+  if (command === "สถานะ server") {
     reply_text = "Server MRM กำลังทำงานปกติ";
-  } else if (event.message.text === "สถานะ MRM") {
+  } else if (command === "สถานะ MRM") {
     reply_text = await checkMRMStatus();
-  } else if (event.message.text === "รายงานปัญหา") {
+  } else if (command === "รายงานปัญหา") {
     reply_text = "กรุณาแจ้งรายละเอียดปัญหาที่พบ";
-  } else if (event.message.text.startsWith("ปัญหา:")) {
-    console.log(`ได้รับรายงานปัญหา: ${event.message.text.slice(6)}`);
+  } else if (command.startsWith("ปัญหา:")) {
+    console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
     reply_text = "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด";
-  } else if (event.message.text === "ข้อมูล MRM") {
+  } else if (command === "ข้อมูล MRM") {
     const completeness = 100; // ตัวอย่างค่า
     reply_text = `ความครบถ้วนของข้อมูล: ${completeness}%`;
   }
