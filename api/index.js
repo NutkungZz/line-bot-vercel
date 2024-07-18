@@ -1,5 +1,6 @@
 const line = require('@line/bot-sdk');
 const express = require('express');
+const fetch = require('node-fetch');
 
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -19,7 +20,17 @@ app.post('/api/callback', line.middleware(config), (req, res) => {
     });
 });
 
-function handleEvent(event) {
+async function checkMRMStatus() {
+  try {
+    const response = await fetch('https://mrm-website-url.com');
+    return response.ok ? "เว็บ MRM กำลังทำงานปกติค่ะ" : "เว็บ MRM มีปัญหาในการเข้าถึงค่ะ";
+  } catch (error) {
+    console.error('Error checking MRM status:', error);
+    return "ไม่สามารถตรวจสอบสถานะเว็บ MRM ได้ในขณะนี้ค่ะ";
+  }
+}
+
+async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
@@ -28,6 +39,8 @@ function handleEvent(event) {
 
   if (event.message.text === "สถานะ server") {
     reply_text = "Server MRM กำลังทำงานปกติ";
+  } else if (event.message.text === "เช็คสถานะเว็บ MRM") {
+    reply_text = await checkMRMStatus();
   } else if (event.message.text === "รายงานปัญหา") {
     reply_text = "กรุณาแจ้งรายละเอียดปัญหาที่พบ";
   } else if (event.message.text.startsWith("ปัญหา:")) {
