@@ -109,6 +109,7 @@ async function handleEvent(event) {
     command = command.slice(botKeyword.length).trim();
   }
 
+  // จัดการคำสั่งที่มาจากการคลิกปุ่มใน Quick Reply Menu
   switch (command.toLowerCase()) {
     case "เมนู":
       reply = createQuickReplyMenu();
@@ -128,6 +129,7 @@ async function handleEvent(event) {
         console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
         reply = { type: 'text', text: "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด" };
       } else {
+        // ถ้าไม่ตรงกับคำสั่งใดๆ ให้แสดงเมนู
         reply = createQuickReplyMenu();
       }
   }
