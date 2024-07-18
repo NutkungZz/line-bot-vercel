@@ -30,10 +30,10 @@ async function checkMRMStatus() {
   }
 }
 
-function createButtonMenu() {
+function createQuickReplyMenu() {
   return {
     type: 'flex',
-    altText: 'เมนูการใช้งาน MRM Monitor',
+    altText: 'MRM Monitor Menu',
     contents: {
       type: 'bubble',
       body: {
@@ -51,91 +51,15 @@ function createButtonMenu() {
           {
             type: 'text',
             text: 'เลือกบริการที่ต้องการ',
-            size: 'sm',
-            color: '#A9A9A9',
+            size: 'md',
+            color: '#FFFFFF',
             align: 'center',
             margin: 'md'
-          },
-          {
-            type: 'box',
-            layout: 'vertical',
-            margin: 'lg',
-            spacing: 'sm',
-            contents: [
-              {
-                type: 'button',
-                action: {
-                  type: 'message',
-                  label: 'ตรวจสอบสถานะ MRM',
-                  text: 'สถานะ MRM'
-                },
-                color: '#FFFFFF',
-                style: 'secondary',
-                adjustMode: 'shrink-to-fit'
-              },
-              {
-                type: 'button',
-                action: {
-                  type: 'message',
-                  label: 'รายงานปัญหา',
-                  text: 'รายงานปัญหา'
-                },
-                color: '#FFFFFF',
-                style: 'secondary',
-                adjustMode: 'shrink-to-fit'
-              },
-              {
-                type: 'button',
-                action: {
-                  type: 'message',
-                  label: 'ข้อมูล MRM',
-                  text: 'ข้อมูล MRM'
-                },
-                color: '#FFFFFF',
-                style: 'secondary',
-                adjustMode: 'shrink-to-fit'
-              }
-            ]
-          }
-        ],
-        backgroundColor: '#1E1E1E',
-        borderColor: '#FFD700',
-        borderWidth: 'light'
-      },
-      footer: {
-        type: 'box',
-        layout: 'vertical',
-        spacing: 'sm',
-        contents: [
-          {
-            type: 'button',
-            action: {
-              type: 'uri',
-              label: 'เยี่ยมชมเว็บไซต์',
-              uri: 'https://mrm.pea.co.th'
-            },
-            color: '#FFD700',
-            style: 'link'
           }
         ],
         backgroundColor: '#1E1E1E'
-      },
-      styles: {
-        body: {
-          backgroundColor: '#1E1E1E'
-        },
-        footer: {
-          backgroundColor: '#1E1E1E'
-        }
       }
-    }
-  };
-}
-
-function createQuickReplyMenu() {
-  return {
-    type: 'text',
-    text: 'เลือกบริการที่ต้องการ',
+    },
     quickReply: {
       items: [
         {
@@ -185,7 +109,7 @@ async function handleEvent(event) {
 
   switch (command) {
     case "เมนู":
-      reply = [createButtonMenu(), createQuickReplyMenu()];
+      reply = createQuickReplyMenu();
       break;
     case "สถานะ MRM":
       reply = { type: 'text', text: await checkMRMStatus() };
@@ -202,7 +126,7 @@ async function handleEvent(event) {
         console.log(`ได้รับรายงานปัญหา: ${command.slice(6)}`);
         reply = { type: 'text', text: "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด" };
       } else {
-        reply = { type: 'text', text: "ขอโทษค่ะ ฉันไม่เข้าใจคำสั่งนี้ กรุณาพิมพ์ 'เมนู' เพื่อดูตัวเลือกที่มีค่ะ" };
+        reply = createQuickReplyMenu();
       }
   }
 
