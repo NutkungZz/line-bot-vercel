@@ -39,15 +39,15 @@ async function handleEvent(event) {
 
   if (event.message.text === "สถานะ server") {
     reply_text = "Server MRM กำลังทำงานปกติ";
-  } else if (event.message.text === "เช็คสถานะเว็บ MRM") {
+  } else if (event.message.text === "สถานะ MRM") {
     reply_text = await checkMRMStatus();
   } else if (event.message.text === "รายงานปัญหา") {
     reply_text = "กรุณาแจ้งรายละเอียดปัญหาที่พบ";
   } else if (event.message.text.startsWith("ปัญหา:")) {
     console.log(`ได้รับรายงานปัญหา: ${event.message.text.slice(6)}`);
     reply_text = "ขอบคุณสำหรับการรายงานปัญหา ทีมงานจะรีบดำเนินการแก้ไขโดยเร็วที่สุด";
-  } else if (event.message.text === "ความครบถ้วนของข้อมูล") {
-    const completeness = 95; // ตัวอย่างค่า
+  } else if (event.message.text === "ข้อมูล MRM") {
+    const completeness = 100; // ตัวอย่างค่า
     reply_text = `ความครบถ้วนของข้อมูล: ${completeness}%`;
   }
 
