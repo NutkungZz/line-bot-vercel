@@ -33,7 +33,7 @@ async function checkMRMStatus() {
 function createButtonMenu() {
   return {
     type: 'flex',
-    altText: 'เมนูการใช้งาน',
+    altText: 'เมนูการใช้งาน MRM Monitor',
     contents: {
       type: 'bubble',
       body: {
@@ -42,10 +42,19 @@ function createButtonMenu() {
         contents: [
           {
             type: 'text',
-            text: 'เมนูการใช้งาน',
+            text: 'MRM Monitor',
             weight: 'bold',
             size: 'xl',
-            align: 'center'
+            align: 'center',
+            color: '#1a237e'
+          },
+          {
+            type: 'text',
+            text: 'เลือกบริการที่ต้องการ',
+            size: 'sm',
+            color: '#546e7a',
+            align: 'center',
+            margin: 'md'
           },
           {
             type: 'box',
@@ -55,34 +64,64 @@ function createButtonMenu() {
             contents: [
               {
                 type: 'button',
-                style: 'primary',
+                style: 'link',
+                height: 'sm',
                 action: {
                   type: 'message',
-                  label: 'สถานะ MRM',
+                  label: 'ตรวจสอบสถานะ MRM',
                   text: 'สถานะ MRM'
-                }
+                },
+                color: '#4fc3f7'
               },
               {
                 type: 'button',
-                style: 'primary',
+                style: 'link',
+                height: 'sm',
                 action: {
                   type: 'message',
                   label: 'รายงานปัญหา',
                   text: 'รายงานปัญหา'
-                }
+                },
+                color: '#4fc3f7'
               },
               {
                 type: 'button',
-                style: 'primary',
+                style: 'link',
+                height: 'sm',
                 action: {
                   type: 'message',
                   label: 'ข้อมูล MRM',
                   text: 'ข้อมูล MRM'
-                }
+                },
+                color: '#4fc3f7'
               }
             ]
           }
-        ]
+        ],
+        backgroundColor: '#e3f2fd'
+      },
+      footer: {
+        type: 'box',
+        layout: 'vertical',
+        spacing: 'sm',
+        contents: [
+          {
+            type: 'button',
+            style: 'link',
+            height: 'sm',
+            action: {
+              type: 'uri',
+              label: 'เยี่ยมชมเว็บไซต์',
+              uri: 'https://mrm.pea.co.th'
+            },
+            color: '#1976d2'
+          },
+          {
+            type: 'spacer',
+            size: 'sm'
+          }
+        ],
+        flex: 0
       }
     }
   };
