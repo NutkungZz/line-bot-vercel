@@ -22,7 +22,7 @@ app.post('/api/callback', line.middleware(config), (req, res) => {
 
 async function checkMRMStatus() {
   try {
-    const response = await fetch('https://mrm-website-url.com');
+    const response = await fetch('https://mrm.pea.co.th');
     return response.ok ? "เว็บ MRM กำลังทำงานปกติค่ะ" : "เว็บ MRM มีปัญหาในการเข้าถึงค่ะ";
   } catch (error) {
     console.error('Error checking MRM status:', error);
